@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEFUMSA Quiz Card Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600;1,900&family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --ink:#0e0e11; --panel:#17171c; --panel2:#1e1e25; --line:rgba(255,255,255,.09);
+    --txt:#f2f0ea; --dim:#9a97a3; --gold:#F5A623;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:var(--ink);color:var(--txt);font-family:'Inter',sans-serif;min-height:100vh}
+  .app{max-width:1200px;margin:0 auto;padding:20px 16px 130px}
+  header.top{padding:6px 2px 18px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .brand{font-family:'Playfair Display',serif;font-weight:900;font-size:22px;letter-spacing:.5px}
+  .brand em{font-style:italic;color:var(--gold)}
+  .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+  .panel h2{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .step{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--gold);color:#111;align-items:center;justify-content:center;font-size:10px;font-weight:900}
+
+  label{display:block;font-size:12px;font-weight:600;color:var(--dim);margin:12px 0 6px}
+  input[type=text],input[type=number],textarea,select{
+    width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    color:var(--txt);font-family:'Inter',sans-serif;font-size:15px;padding:11px 12px;outline:none;
+  }
+  input:focus,textarea:focus,select:focus{border-color:var(--gold)}
+  textarea{resize:vertical;line-height:1.55}
+  #pasteBox{min-height:160px;font-size:14px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+  .parseBtn{width:100%;margin-top:12px;padding:13px;border:none;border-radius:11px;background:var(--gold);color:#141414;font:800 14px 'Inter',sans-serif;cursor:pointer;letter-spacing:.02em}
+  .parseBtn:active{transform:scale(.98)}
+  .parseNote{font-size:11.5px;color:var(--dim);margin-top:10px;line-height:1.55}
+  .parseNote b{color:#c9c6cf}
+
+  .status{display:none;margin-top:10px;padding:9px 12px;border-radius:9px;font-size:12px;font-weight:600}
+  .status.ok{display:block;background:rgba(0,168,120,.12);color:#4fd1a5;border:1px solid rgba(0,168,120,.3)}
+  .status.err{display:block;background:rgba(230,57,70,.12);color:#f28b93;border:1px solid rgba(230,57,70,.3)}
+
+  details{margin-top:14px}
+  summary{font-size:12px;color:var(--dim);cursor:pointer;font-weight:600;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸ ";color:var(--gold)}
+  details[open] summary::before{content:"▾ "}
+  .manual{margin-top:10px}
+
+  .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{flex:1;padding:11px 0;background:none;border:none;color:var(--dim);font:600 14px 'Inter',sans-serif;cursor:pointer}
+  .seg button.on{background:var(--gold);color:#111}
+  .opt-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+  .opt-badge{width:30px;height:30px;flex:0 0 30px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--dim)}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+  .swatch{border:1px solid var(--line);border-radius:12px;padding:9px 10px;cursor:pointer;background:var(--panel2);text-align:left}
+  .swatch .dot{width:100%;height:24px;border-radius:7px;margin-bottom:7px;position:relative;overflow:hidden}
+  .swatch .dot i{position:absolute;right:6px;top:5px;width:13px;height:13px;border-radius:50%}
+  .swatch span{font-size:10.5px;font-weight:600;color:var(--dim);display:block;line-height:1.25}
+  .swatch.on{border-color:var(--gold)}
+  .swatch.on span{color:var(--txt)}
+
+  .previews{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:860px){.previews{grid-template-columns:1fr 1fr}}
+  .pcard h3{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;font-weight:700}
+  .viewport{width:100%;overflow:hidden;border-radius:16px;border:1px solid var(--line);background:#000}
+  .stage{transform-origin:top left}
+
+  .dl{position:fixed;left:0;right:0;bottom:0;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(14,14,17,.97),rgba(14,14,17,.75),transparent);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:50}
+  .dl .row{display:flex;gap:10px;width:100%;max-width:560px}
+  .dl button{flex:1;padding:15px;border:none;border-radius:14px;font:800 14.5px 'Inter',sans-serif;cursor:pointer}
+  .dl .main{background:var(--gold);color:#141414;box-shadow:0 8px 30px rgba(245,166,35,.35)}
+  .dl .ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
+  .dl button:disabled{opacity:.55}
+
+  /* ---------- THE CARD (1080 x 1350) ---------- */
+  .card{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:'Inter',sans-serif;display:flex;flex-direction:column;padding:78px 72px 64px}
+  .card *{position:relative;z-index:2}
+  .bg-glow{position:absolute;z-index:1;width:900px;height:900px;border-radius:50%;filter:blur(160px);opacity:.34;top:-260px;right:-260px}
+  .bg-glow2{position:absolute;z-index:1;width:700px;height:700px;border-radius:50%;filter:blur(150px);opacity:.2;bottom:-220px;left:-220px}
+  .deco-ring{position:absolute;z-index:1;width:520px;height:520px;border-radius:50%;border:1.5px solid;opacity:.16;top:-160px;right:-130px}
+  .deco-ring2{position:absolute;z-index:1;width:200px;height:200px;border-radius:50%;border:1px solid;opacity:.14;bottom:170px;right:60px}
+  .deco-line{position:absolute;z-index:1;width:2px;height:340px;opacity:.16;left:60px;bottom:120px;transform:rotate(18deg)}
+  .deco-sq{position:absolute;z-index:1;width:26px;height:26px;transform:rotate(45deg);opacity:.5;left:80px;top:330px}
+  .c-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .c-eyebrow{font-size:21px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;opacity:.85}
+  .c-arm{display:inline-block;margin-top:14px;font-size:17px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;padding:10px 22px;border-radius:100px;border:1.5px solid}
+  .c-day{text-align:right;font-family:'Bebas Neue',sans-serif;line-height:.85}
+  .c-day .n{font-size:96px;letter-spacing:.02em}
+  .c-day .l{font-size:22px;letter-spacing:.5em;opacity:.65;display:block;margin-bottom:6px;font-family:'Inter',sans-serif;font-weight:700}
+  .c-subject{font-family:'Playfair Display',serif;font-weight:900;margin-top:44px;line-height:1.02;letter-spacing:-.01em}
+  .c-topic{margin-top:16px;font-size:22px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;opacity:.72}
+  .c-rule{height:3px;width:110px;margin-top:26px;border-radius:2px}
+  .glass{border-radius:30px;border:1.5px solid;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 30px 70px rgba(0,0,0,.35)}
+  .c-q{margin-top:38px;padding:46px 50px;line-height:1.42;font-weight:500}
+  .c-q .qtag{font-size:17px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;display:block;margin-bottom:18px}
+  .c-opts{margin-top:34px;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0;justify-content:flex-start}
+  .pill{display:flex;align-items:center;gap:22px;border-radius:100px;border:1.5px solid;padding:16px 30px 16px 16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .pill .lt{width:56px;height:56px;flex:0 0 56px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:32px;padding-top:3px}
+  .pill .tx{font-size:27px;font-weight:500;line-height:1.25}
+  .pill.correct{box-shadow:0 0 0 2px currentColor inset}
+  .pill.correct .tag{margin-left:auto;font-size:15px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;padding:8px 18px;border-radius:100px}
+  .c-expl{margin-top:32px;padding:40px 46px}
+  .c-expl .etag{font-size:16px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;display:block;margin-bottom:16px}
+  .c-expl .etx{font-size:26px;line-height:1.5;font-weight:400}
+  .c-foot{margin-top:auto;padding-top:34px;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid}
+  .c-foot .wm{font-family:'Playfair Display',serif;font-weight:900;font-size:34px;letter-spacing:.04em}
+  .c-foot .wm em{font-style:italic}
+  .c-foot .assoc{font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;margin-top:6px}
+  .c-foot .uni{font-size:17px;font-weight:800;letter-spacing:.4em;text-transform:uppercase;opacity:.75}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">AEFUMSA <em>Quiz Card</em> Studio</div>
+    <div class="sub">Paste once · Get both cards</div>
+  </header>
+
+  <!-- STEP 1: PASTE -->
+  <div class="panel">
+    <h2><span class="step">1</span> Paste everything from ChatGPT</h2>
+    <textarea id="pasteBox" placeholder="SUBJECT: Physiology
+TOPIC: Cardiac Cycle
+QUESTION: A 45-year-old man presents with...
+A: Option one
+B: Option two
+C: Option three
+D: Option four
+E: Option five
+ANSWER: C
+EXPLANATION: Because..."></textarea>
+    <button class="parseBtn" id="parseBtn">Split into Question + Answer Cards</button>
+    <div class="status" id="statusMsg"></div>
+    <p class="parseNote">Ask ChatGPT to output in this exact labeled format (<b>SUBJECT / TOPIC / QUESTION / A-E / ANSWER / EXPLANATION</b>), then paste the whole reply here. Tap the button above once — both cards below update automatically.</p>
+
+    <details>
+      <summary>Edit fields manually instead</summary>
+      <div class="manual">
+        <div class="row2">
+          <div><label>Subject</label><input type="text" id="subject" placeholder="e.g. Physiology"></div>
+          <div><label>Topic</label><input type="text" id="topic" placeholder="e.g. Cardiac Cycle"></div>
+        </div>
+        <label>Question</label>
+        <textarea id="question" style="min-height:70px" placeholder="MCQ stem…"></textarea>
+        <label>Options</label>
+        <div class="opt-row"><div class="opt-badge">A</div><input type="text" id="optA"></div>
+        <div class="opt-row"><div class="opt-badge">B</div><input type="text" id="optB"></div>
+        <div class="opt-row"><div class="opt-badge">C</div><input type="text" id="optC"></div>
+        <div class="opt-row"><div class="opt-badge">D</div><input type="text" id="optD"></div>
+        <div class="opt-row"><div class="opt-badge">E</div><input type="text" id="optE"></div>
+        <label>Correct answer</label>
+        <select id="correct"><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        <label>Explanation</label>
+        <textarea id="explanation" style="min-height:70px"></textarea>
+      </div>
+    </details>
+  </div>
+
+  <!-- STEP 2: SETTINGS -->
+  <div class="panel">
+    <h2><span class="step">2</span> Arm, day &amp; theme</h2>
+    <div class="row2">
+      <div>
+        <label>Arm</label>
+        <select id="arm">
+          <option>Preclinical</option>
+          <option>Clinical</option>
+        </select>
+      </div>
+      <div>
+        <label>Day number</label>
+        <input type="number" id="day" value="1" min="1">
+      </div>
+    </div>
+    <label style="margin-top:16px">Theme — same theme used for both cards</label>
+    <div class="swatches" id="swatches"></div>
+  </div>
+
+  <!-- STEP 3: PREVIEW -->
+  <div class="panel">
+    <h2><span class="step">3</span> Preview &amp; download</h2>
+    <div class="previews">
+      <div class="pcard">
+        <h3>Question Card · post at 8AM</h3>
+        <div class="viewport" id="vpQ"><div class="stage" id="stageQ"></div></div>
+      </div>
+      <div class="pcard">
+        <h3>Answer Card · post at 4PM</h3>
+        <div class="viewport" id="vpA"><div class="stage" id="stageA"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dl">
+  <div class="row">
+    <button class="ghost" id="dlQBtn">Question PNG</button>
+    <button class="ghost" id="dlABtn">Answer PNG</button>
+  </div>
+  <div class="row">
+    <button class="main" id="dlBothBtn">Download Both</button>
+  </div>
+</div>
+
+<script>
+const THEMES = [
+  {n:"Midnight Gold",   bg:"linear-gradient(158deg,#0b0b0d 0%,#141007 55%,#060606 100%)", ac:"#F5A623", g2:"#F5A623", txt:"#F6F2E8", glass:"rgba(255,255,255,0.055)", gborder:"rgba(245,166,35,0.35)", dark:1},
+  {n:"Arctic Glass",    bg:"linear-gradient(160deg,#F4F9FD 0%,#DCEBF5 45%,#C7DEEE 100%)", ac:"#0077B6", g2:"#0096C7", txt:"#0E1B26", glass:"rgba(255,255,255,0.55)", gborder:"rgba(0,119,182,0.30)", dark:0},
+  {n:"Crimson Editorial",bg:"linear-gradient(158deg,#0a0708 0%,#1a0a0d 55%,#050405 100%)", ac:"#C1121F", g2:"#F5A623", txt:"#F5EFEA", glass:"rgba(255,255,255,0.05)", gborder:"rgba(193,18,31,0.42)", dark:1},
+  {n:"Emerald Depth",   bg:"linear-gradient(158deg,#04120d 0%,#0A2E22 55%,#031009 100%)", ac:"#00A878", g2:"#F5A623", txt:"#EDF5F0", glass:"rgba(255,255,255,0.055)", gborder:"rgba(0,168,120,0.38)", dark:1},
+  {n:"Purple Reign",    bg:"linear-gradient(158deg,#0c0714 0%,#1E0F35 55%,#080511 100%)", ac:"#9D4EDD", g2:"#F5A623", txt:"#F2EDF8", glass:"rgba(255,255,255,0.055)", gborder:"rgba(157,78,221,0.40)", dark:1},
+  {n:"Solar Flare",     bg:"linear-gradient(158deg,#0b0805 0%,#1c0f04 55%,#060402 100%)", ac:"#FF6B00", g2:"#F5A623", txt:"#F7F1E9", glass:"rgba(255,255,255,0.055)", gborder:"rgba(255,107,0,0.40)", dark:1},
+  {n:"Steel & Rose",    bg:"linear-gradient(158deg,#141318 0%,#232030 55%,#0e0d12 100%)", ac:"#C77DFF", g2:"#C77DFF", txt:"#F1EEF6", glass:"rgba(255,255,255,0.06)", gborder:"rgba(199,125,255,0.38)", dark:1},
+  {n:"Cobalt Strike",   bg:"linear-gradient(158deg,#040914 0%,#0A1A3A 55%,#03060e 100%)", ac:"#0096FF", g2:"#F5A623", txt:"#EBF1F8", glass:"rgba(255,255,255,0.055)", gborder:"rgba(0,150,255,0.40)", dark:1},
+  {n:"Monochrome Edge", bg:"linear-gradient(158deg,#000 0%,#101010 55%,#000 100%)",        ac:"#FFFFFF", g2:"#F5A623", txt:"#F5F5F2", glass:"rgba(255,255,255,0.06)", gborder:"rgba(255,255,255,0.30)", dark:1},
+  {n:"Forest Noir",     bg:"linear-gradient(158deg,#060d08 0%,#122318 55%,#040a06 100%)", ac:"#74C69D", g2:"#F5A623", txt:"#EEF4EF", glass:"rgba(255,255,255,0.055)", gborder:"rgba(116,198,157,0.38)", dark:1},
+  {n:"Volcanic",        bg:"linear-gradient(158deg,#0c0505 0%,#26100E 55%,#070303 100%)", ac:"#E63946", g2:"#F5A623", txt:"#F6EEEC", glass:"rgba(255,255,255,0.055)", gborder:"rgba(230,57,70,0.42)", dark:1},
+  {n:"Glacier",         bg:"linear-gradient(160deg,#FBFDFE 0%,#E9F2F6 45%,#D6E7EE 100%)", ac:"#00B4D8", g2:"#0096C7", txt:"#0D1B21", glass:"rgba(255,255,255,0.6)", gborder:"rgba(0,180,216,0.32)", dark:0},
+  {n:"Obsidian",        bg:"linear-gradient(158deg,#000 0%,#0a0f0a 55%,#000 100%)",        ac:"#39FF14", g2:"#F5A623", txt:"#F0F5EF", glass:"rgba(255,255,255,0.05)", gborder:"rgba(57,255,20,0.35)", dark:1},
+  {n:"Dusk",            bg:"linear-gradient(158deg,#0d0705 0%,#3A1A08 55%,#0a0504 100%)", ac:"#F4A261", g2:"#F4A261", txt:"#F7F0E9", glass:"rgba(255,255,255,0.06)", gborder:"rgba(244,162,97,0.40)", dark:1},
+];
+
+const S = {
+  arm:"Preclinical", day:1,
+  subject:"", topic:"", question:"",
+  opts:["","","","",""], correct:"A", explanation:"",
+  theme:0
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+/* ================= PARSER ================= */
+function parsePaste(text){
+  const labels = ["SUBJECT","TOPIC","QUESTION","A","B","C","D","E","ANSWER","EXPLANATION"];
+  const out = {};
+  let current = null;
+  text.split(/\r?\n/).forEach(raw=>{
+    const line = raw.trim();
+    if(!line) return;
+    const m = line.match(/^([A-Za-z]+)\s*[:.\)]\s*(.*)$/);
+    if(m && labels.includes(m[1].toUpperCase())){
+      current = m[1].toUpperCase();
+      out[current] = m[2] || "";
+    } else if(current){
+      out[current] = (out[current] ? out[current]+" " : "") + line;
+    }
+  });
+  return out;
+}
+
+function applyParsed(p){
+  S.subject = (p.SUBJECT||"").trim();
+  S.topic = (p.TOPIC||"").trim();
+  S.question = (p.QUESTION||"").trim();
+  S.opts = [p.A,p.B,p.C,p.D,p.E].map(x=>(x||"").trim());
+  S.correct = ((p.ANSWER||"A").trim().toUpperCase().match(/[A-E]/)||["A"])[0];
+  S.explanation = (p.EXPLANATION||"").trim();
+
+  $("subject").value = S.subject;
+  $("topic").value = S.topic;
+  $("question").value = S.question;
+  $("optA").value = S.opts[0]; $("optB").value = S.opts[1]; $("optC").value = S.opts[2];
+  $("optD").value = S.opts[3]; $("optE").value = S.opts[4];
+  $("correct").value = S.correct;
+  $("explanation").value = S.explanation;
+}
+
+$("parseBtn").onclick = ()=>{
+  const raw = $("pasteBox").value;
+  const st = $("statusMsg");
+  if(!raw.trim()){
+    st.className = "status err"; st.textContent = "Paste something first."; return;
+  }
+  const p = parsePaste(raw);
+  const gotQ = p.QUESTION && p.A && p.B;
+  applyParsed(p);
+  render();
+  if(gotQ){
+    st.className = "status ok";
+    st.textContent = "Done — both cards updated below. Check they look right, then download.";
+  } else {
+    st.className = "status err";
+    st.textContent = "Couldn't find all fields. Check the format matches the example, or fill fields manually below.";
+  }
+};
+
+/* ================= CARD RENDER ================= */
+function cardHTML(mode){
+  const t = THEMES[S.theme];
+  const isAns = mode === "answer";
+  const qLen = (S.question||"").length;
+  const qSize = qLen>320?29:qLen>220?33:qLen>130?37:42;
+  const subj = S.subject || "Subject";
+  const subjSize = subj.length>18?62:subj.length>11?76:92;
+  const optCount = S.opts.filter(o=>o.trim()).length || 5;
+  const optTx = optCount>4 && !isAns ? 27 : 26;
+  const dim = t.dark ? "rgba(255,255,255,.45)" : "rgba(0,0,0,.4)";
+  const footLine = t.dark ? "rgba(255,255,255,.14)" : "rgba(0,0,0,.12)";
+  const pillBg = t.dark ? "rgba(255,255,255,.045)" : "rgba(255,255,255,.5)";
+  const pillBorder = t.dark ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.14)";
+  const correctText = t.dark ? "#0d0d0d" : "#ffffff";
+
+  const options = ["A","B","C","D","E"].map((L,i)=>{
+    const txt = S.opts[i].trim();
+    if(!txt) return "";
+    const isC = isAns && S.correct===L;
+    if(isC){
+      return `<div class="pill correct" style="background:${t.ac};border-color:${t.ac};color:${correctText}">
+        <div class="lt" style="border-color:${correctText};color:${correctText}">${L}</div>
+        <div class="tx" style="font-weight:700;font-size:${optTx}px">${esc(txt)}</div>
+        <div class="tag" style="background:${correctText};color:${t.ac}">Correct</div>
+      </div>`;
+    }
+    return `<div class="pill" style="background:${pillBg};border-color:${pillBorder};color:${t.txt};${isAns?'opacity:.45':''}">
+      <div class="lt" style="border-color:${t.ac};color:${t.ac}">${L}</div>
+      <div class="tx" style="font-size:${optTx}px">${esc(txt)}</div>
+    </div>`;
+  }).join("");
+
+  const explBlock = isAns && S.explanation.trim() ? `
+    <div class="glass c-expl" style="background:${t.glass};border-color:${t.gborder}">
+      <span class="etag" style="color:${t.ac}">Why</span>
+      <div class="etx" style="color:${t.txt}">${esc(S.explanation)}</div>
+    </div>` : "";
+
+  return `
+  <div class="card" style="background:${t.bg};color:${t.txt}">
+    <div class="bg-glow" style="background:${t.ac}"></div>
+    <div class="bg-glow2" style="background:${t.g2}"></div>
+    <div class="deco-ring" style="border-color:${t.ac}"></div>
+    <div class="deco-ring2" style="border-color:${t.g2}"></div>
+    <div class="deco-line" style="background:linear-gradient(${t.ac},transparent)"></div>
+    <div class="deco-sq" style="border:2px solid ${t.g2}"></div>
+
+    <div class="c-top">
+      <div>
+        <div class="c-eyebrow" style="color:${t.txt}">AEFUMSA · Daily MCQ</div>
+        <div class="c-arm" style="color:${t.ac};border-color:${t.ac}">${esc(S.arm)} Arm</div>
+      </div>
+      <div class="c-day" style="color:${t.ac}">
+        <span class="l" style="color:${dim}">Day</span>
+        <span class="n">${String(S.day).padStart(2,"0")}</span>
+      </div>
+    </div>
+
+    <div class="c-subject" style="font-size:${isAns?subjSize*0.72:subjSize}px">${esc(subj)}</div>
+    <div class="c-topic" style="color:${dim}">${esc(S.topic||"Topic")}</div>
+    <div class="c-rule" style="background:linear-gradient(90deg,${t.ac},transparent)"></div>
+
+    <div class="glass c-q" style="background:${t.glass};border-color:${t.gborder};font-size:${isAns?Math.max(qSize-8,25):qSize}px">
+      <span class="qtag" style="color:${t.ac}">${isAns?"The Question":"Question"}</span>
+      ${esc(S.question||"Your question will appear here…")}
+    </div>
+
+    <div class="c-opts">${options}${explBlock}</div>
+
+    <div class="c-foot" style="border-color:${footLine}">
+      <div>
+        <div class="wm">AEF<em style="color:${t.ac}">U</em>MSA</div>
+        <div class="assoc">Medical Students' Association</div>
+      </div>
+      <div class="uni" style="color:${t.txt}">AE-FUNAI</div>
+    </div>
+  </div>`;
+}
+
+/* ================= PREVIEW ================= */
+function fitOne(vpId, stId){
+  const vp = $(vpId), st = $(stId);
+  const scale = vp.clientWidth / 1080;
+  st.style.transform = `scale(${scale})`;
+  st.style.width = "1080px";
+  vp.style.height = (1350*scale) + "px";
+}
+function render(){
+  $("stageQ").innerHTML = cardHTML("question");
+  $("stageA").innerHTML = cardHTML("answer");
+  fitOne("vpQ","stageQ");
+  fitOne("vpA","stageA");
+}
+window.addEventListener("resize", render);
+
+/* ================= MANUAL FIELD BINDINGS ================= */
+[["arm","arm"],["subject","subject"],["topic","topic"],["question","question"],["correct","correct"],["explanation","explanation"]]
+.forEach(([id,key])=>{ $(id).addEventListener("input", e=>{ S[key]=e.target.value; render(); }); });
+$("day").addEventListener("input", e=>{ S.day = parseInt(e.target.value)||1; render(); });
+["A","B","C","D","E"].forEach((L,i)=>{
+  $("opt"+L).addEventListener("input", e=>{ S.opts[i]=e.target.value; render(); });
+});
+
+/* ================= THEME SWATCHES ================= */
+const sw = $("swatches");
+THEMES.forEach((t,i)=>{
+  const b = document.createElement("button");
+  b.className = "swatch" + (i===0?" on":"");
+  b.innerHTML = `<div class="dot" style="background:${t.bg}"><i style="background:${t.ac}"></i></div><span>${t.n}</span>`;
+  b.onclick = ()=>{
+    sw.querySelectorAll(".swatch").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); S.theme=i; render();
+  };
+  sw.appendChild(b);
+});
+
+/* ================= EXPORT ================= */
+async function exportCard(mode){
+  await document.fonts.ready;
+  const holder = document.createElement("div");
+  holder.style.cssText = "position:fixed;left:-12000px;top:0;width:1080px;height:1350px;z-index:-1";
+  holder.innerHTML = cardHTML(mode);
+  document.body.appendChild(holder);
+  await new Promise(r=>setTimeout(r,120));
+  const canvas = await html2canvas(holder.firstElementChild, {
+    width:1080, height:1350, scale:1, backgroundColor:null, useCORS:true, logging:false
+  });
+  document.body.removeChild(holder);
+  const a = document.createElement("a");
+  a.download = `AEFUMSA_Day${String(S.day).padStart(2,"0")}_${S.arm}_${mode==="answer"?"ANSWER":"QUESTION"}.png`;
+  a.href = canvas.toDataURL("image/png");
+  a.click();
+}
+
+$("dlQBtn").onclick = async ()=>{
+  const b = $("dlQBtn"); b.disabled=true; b.textContent="Rendering…";
+  try{ await exportCard("question"); } catch(e){ alert("Export failed: "+e.message); }
+  b.disabled=false; b.textContent="Question PNG";
+};
+$("dlABtn").onclick = async ()=>{
+  const b = $("dlABtn"); b.disabled=true; b.textContent="Rendering…";
+  try{ await exportCard("answer"); } catch(e){ alert("Export failed: "+e.message); }
+  b.disabled=false; b.textContent="Answer PNG";
+};
+$("dlBothBtn").onclick = async ()=>{
+  const b = $("dlBothBtn"); b.disabled=true; b.textContent="Rendering both…";
+  try{
+    await exportCard("question");
+    await new Promise(r=>setTimeout(r,400));
+    await exportCard("answer");
+  } catch(e){ alert("Export failed: "+e.message); }
+  b.disabled=false; b.textContent="Download Both";
+};
+
+render();
+</script>
+</body>
+</html>
