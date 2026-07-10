@@ -15,13 +15,11 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{background:var(--ink);color:var(--txt);font-family:'Inter',sans-serif;min-height:100vh}
-  .app{max-width:1200px;margin:0 auto;padding:20px 16px 150px}
-  header.top{padding:6px 2px 18px;border-bottom:1px solid var(--line);margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .app{max-width:1200px;margin:0 auto;padding:20px 16px 130px}
+  header.top{padding:6px 2px 18px;border-bottom:1px solid var(--line);margin-bottom:20px}
   .brand{font-family:'Playfair Display',serif;font-weight:900;font-size:22px;letter-spacing:.5px}
   .brand em{font-style:italic;color:var(--gold)}
   .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:3px}
-  .saved{font-size:10.5px;color:var(--dim);display:flex;align-items:center;gap:5px;white-space:nowrap;margin-top:4px}
-  .saved i{width:6px;height:6px;border-radius:50%;background:#4fd1a5;display:inline-block}
 
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
   .panel h2{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;font-weight:700;display:flex;align-items:center;gap:8px}
@@ -37,17 +35,13 @@
   #pasteBox{min-height:160px;font-size:14px}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-  .btnRow{display:flex;gap:8px;margin-top:12px}
-  .parseBtn{flex:1;padding:13px;border:none;border-radius:11px;background:var(--gold);color:#141414;font:800 14px 'Inter',sans-serif;cursor:pointer;letter-spacing:.02em}
+  .parseBtn{width:100%;margin-top:12px;padding:13px;border:none;border-radius:11px;background:var(--gold);color:#141414;font:800 14px 'Inter',sans-serif;cursor:pointer;letter-spacing:.02em}
   .parseBtn:active{transform:scale(.98)}
-  .pasteBtn{flex:0 0 auto;padding:13px 16px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--txt);font:700 13px 'Inter',sans-serif;cursor:pointer}
-  .clearBtn{flex:0 0 auto;padding:13px 16px;border:1px solid var(--line);border-radius:11px;background:transparent;color:var(--dim);font:700 13px 'Inter',sans-serif;cursor:pointer}
   .parseNote{font-size:11.5px;color:var(--dim);margin-top:10px;line-height:1.55}
   .parseNote b{color:#c9c6cf}
 
   .status{display:none;margin-top:10px;padding:9px 12px;border-radius:9px;font-size:12px;font-weight:600}
   .status.ok{display:block;background:rgba(0,168,120,.12);color:#4fd1a5;border:1px solid rgba(0,168,120,.3)}
-  .status.warn{display:block;background:rgba(245,166,35,.12);color:var(--gold);border:1px solid rgba(245,166,35,.3)}
   .status.err{display:block;background:rgba(230,57,70,.12);color:#f28b93;border:1px solid rgba(230,57,70,.3)}
 
   details{margin-top:14px}
@@ -57,37 +51,32 @@
   details[open] summary::before{content:"▾ "}
   .manual{margin-top:10px}
 
+  .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{flex:1;padding:11px 0;background:none;border:none;color:var(--dim);font:600 14px 'Inter',sans-serif;cursor:pointer}
+  .seg button.on{background:var(--gold);color:#111}
   .opt-row{display:flex;gap:8px;align-items:center;margin-top:8px}
   .opt-badge{width:30px;height:30px;flex:0 0 30px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--dim)}
 
   .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
-  .swatch{border:1px solid var(--line);border-radius:12px;padding:9px 10px;cursor:pointer;background:var(--panel2);text-align:left;position:relative}
-  .swatch .dot{width:100%;height:38px;border-radius:7px;margin-bottom:7px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-  .swatch .dot b{font-family:'Playfair Display',serif;font-size:15px;font-weight:900;letter-spacing:1px}
-  .swatch .dot i{position:absolute;right:6px;top:6px;width:12px;height:12px;border-radius:50%}
+  .swatch{border:1px solid var(--line);border-radius:12px;padding:9px 10px;cursor:pointer;background:var(--panel2);text-align:left}
+  .swatch .dot{width:100%;height:24px;border-radius:7px;margin-bottom:7px;position:relative;overflow:hidden}
+  .swatch .dot i{position:absolute;right:6px;top:5px;width:13px;height:13px;border-radius:50%}
   .swatch span{font-size:10.5px;font-weight:600;color:var(--dim);display:block;line-height:1.25}
   .swatch.on{border-color:var(--gold)}
   .swatch.on span{color:var(--txt)}
-  .swatch .recent{position:absolute;top:6px;left:8px;font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(245,166,35,.15);padding:2px 5px;border-radius:20px}
 
   .previews{display:grid;grid-template-columns:1fr;gap:16px}
   @media(min-width:860px){.previews{grid-template-columns:1fr 1fr}}
-  .pcard h3{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
-  .pcard h3 .ok{color:#4fd1a5;font-size:14px}
+  .pcard h3{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;font-weight:700}
   .viewport{width:100%;overflow:hidden;border-radius:16px;border:1px solid var(--line);background:#000}
   .stage{transform-origin:top left}
-  .overflowWarn{display:none;margin-top:8px;font-size:11px;color:var(--gold);font-weight:600}
-  .overflowWarn.show{display:block}
 
   .dl{position:fixed;left:0;right:0;bottom:0;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(14,14,17,.97),rgba(14,14,17,.75),transparent);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:50}
   .dl .row{display:flex;gap:10px;width:100%;max-width:560px}
-  .dl button{flex:1;padding:15px;border:none;border-radius:14px;font:800 14.5px 'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+  .dl button{flex:1;padding:15px;border:none;border-radius:14px;font:800 14.5px 'Inter',sans-serif;cursor:pointer}
   .dl .main{background:var(--gold);color:#141414;box-shadow:0 8px 30px rgba(245,166,35,.35)}
   .dl .ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
   .dl button:disabled{opacity:.55}
-  .spinner{width:14px;height:14px;border:2px solid rgba(0,0,0,.25);border-top-color:#141414;border-radius:50%;animation:spin .7s linear infinite;display:none}
-  .ghost .spinner{border-color:rgba(255,255,255,.25);border-top-color:#fff}
-  @keyframes spin{to{transform:rotate(360deg)}}
 
   /* ---------- THE CARD (1080 x 1350) ---------- */
   .card{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:'Inter',sans-serif;display:flex;flex-direction:column;padding:78px 72px 64px}
@@ -101,14 +90,16 @@
   .c-top{display:flex;justify-content:space-between;align-items:flex-start}
   .c-eyebrow{font-size:21px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;opacity:.85}
   .c-arm{display:inline-block;margin-top:14px;font-size:17px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;padding:10px 22px;border-radius:100px;border:1.5px solid}
+  .c-day{text-align:right;font-family:'Bebas Neue',sans-serif;line-height:.85}
+  .c-day .n{font-size:96px;letter-spacing:.02em}
+  .c-day .l{font-size:22px;letter-spacing:.5em;opacity:.65;display:block;margin-bottom:6px;font-family:'Inter',sans-serif;font-weight:700}
   .c-subject{font-family:'Playfair Display',serif;font-weight:900;margin-top:44px;line-height:1.02;letter-spacing:-.01em}
   .c-topic{margin-top:16px;font-size:22px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;opacity:.72}
   .c-rule{height:3px;width:110px;margin-top:26px;border-radius:2px}
   .glass{border-radius:30px;border:1.5px solid;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 30px 70px rgba(0,0,0,.35)}
   .c-q{margin-top:38px;padding:46px 50px;line-height:1.42;font-weight:500}
   .c-q .qtag{font-size:17px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;display:block;margin-bottom:18px}
-  .c-opts{margin-top:34px;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0;justify-content:flex-start;position:relative}
-  .watermark{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);font-family:"Playfair Display",serif;font-size:110px;font-weight:900;letter-spacing:8px;opacity:.04;pointer-events:none;z-index:0;white-space:nowrap}
+  .c-opts{margin-top:34px;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0;justify-content:flex-start;position:relative}.watermark{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);font-family:"Playfair Display",serif;font-size:110px;font-weight:900;letter-spacing:8px;opacity:.04;pointer-events:none;z-index:0;white-space:nowrap}
   .pill{display:flex;align-items:center;gap:22px;border-radius:100px;border:1.5px solid;padding:16px 30px 16px 16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   .pill .lt{width:56px;height:56px;flex:0 0 56px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:32px;padding-top:3px}
   .pill .tx{font-size:27px;font-weight:500;line-height:1.25}
@@ -118,25 +109,23 @@
   .c-expl .etag{font-size:16px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;display:block;margin-bottom:16px}
   .c-expl .etx{font-size:26px;line-height:1.5;font-weight:400}
   .c-foot{margin-top:auto;padding-top:34px;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid}
-  .c-foot .wm{font-family:'Playfair Display',serif;font-weight:900;font-size:34px;letter-spacing:.04em;opacity:.4}
+  .c-foot .wm{font-family:'Playfair Display',serif;font-weight:900;font-size:34px;letter-spacing:.04em}
   .c-foot .wm em{font-style:italic}
-  .c-foot .assoc{font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.35;margin-top:6px}
+  .c-foot .assoc{font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;margin-top:6px}
   .c-foot .uni{font-size:17px;font-weight:800;letter-spacing:.4em;text-transform:uppercase;opacity:.75}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
-    <div>
-      <div class="brand">AEFUMSA <em>Quiz Card</em> Studio</div>
-      <div class="sub">Paste once · Get both cards</div>
-    </div>
-    <div class="saved" id="savedTag"><i></i> Saved</div>
+    <div class="brand">AEFUMSA <em>Quiz Card</em> Studio</div>
+    <div class="sub">Paste once · Get both cards</div>
   </header>
 
+  <!-- STEP 1: PASTE -->
   <div class="panel">
     <h2><span class="step">1</span> Paste everything from ChatGPT</h2>
-    <textarea id="pasteBox" aria-label="Paste ChatGPT output" placeholder="SUBJECT: Physiology
+    <textarea id="pasteBox" placeholder="SUBJECT: Physiology
 TOPIC: Cardiac Cycle
 QUESTION: A 45-year-old man presents with...
 A: Option one
@@ -146,60 +135,70 @@ D: Option four
 E: Option five
 ANSWER: C
 EXPLANATION: Because..."></textarea>
-    <div class="btnRow">
-      <button class="pasteBtn" id="pasteBtn" type="button">Paste</button>
-      <button class="parseBtn" id="parseBtn" type="button">Split into Q + A Cards</button>
-      <button class="clearBtn" id="clearBtn" type="button">Clear</button>
-    </div>
-    <div class="status" id="statusMsg" role="status" aria-live="polite"></div>
-    <p class="parseNote">Ask ChatGPT for the exact labeled format (<b>SUBJECT / TOPIC / QUESTION / A-E / ANSWER / EXPLANATION</b>), then paste the whole reply. Code fences and colons inside options are handled automatically.</p>
+    <button class="parseBtn" id="parseBtn">Split into Question + Answer Cards</button>
+    <div class="status" id="statusMsg"></div>
+    <p class="parseNote">Ask ChatGPT to output in this exact labeled format (<b>SUBJECT / TOPIC / QUESTION / A-E / ANSWER / EXPLANATION</b>), then paste the whole reply here. Tap the button above once — both cards below update automatically.</p>
 
     <details>
       <summary>Edit fields manually instead</summary>
       <div class="manual">
         <div class="row2">
-          <div><label for="subject">Subject</label><input type="text" id="subject" placeholder="e.g. Physiology"></div>
-          <div><label for="topic">Topic</label><input type="text" id="topic" placeholder="e.g. Cardiac Cycle"></div>
+          <div><label>Subject</label><input type="text" id="subject" placeholder="e.g. Physiology"></div>
+          <div><label>Topic</label><input type="text" id="topic" placeholder="e.g. Cardiac Cycle"></div>
         </div>
-        <label for="question">Question</label>
+        <label>Question</label>
         <textarea id="question" style="min-height:70px" placeholder="MCQ stem…"></textarea>
         <label>Options</label>
-        <div class="opt-row"><div class="opt-badge">A</div><input type="text" id="optA" aria-label="Option A"></div>
-        <div class="opt-row"><div class="opt-badge">B</div><input type="text" id="optB" aria-label="Option B"></div>
-        <div class="opt-row"><div class="opt-badge">C</div><input type="text" id="optC" aria-label="Option C"></div>
-        <div class="opt-row"><div class="opt-badge">D</div><input type="text" id="optD" aria-label="Option D"></div>
-        <div class="opt-row"><div class="opt-badge">E</div><input type="text" id="optE" aria-label="Option E"></div>
-        <label for="correct">Correct answer</label>
+        <div class="opt-row"><div class="opt-badge">A</div><input type="text" id="optA"></div>
+        <div class="opt-row"><div class="opt-badge">B</div><input type="text" id="optB"></div>
+        <div class="opt-row"><div class="opt-badge">C</div><input type="text" id="optC"></div>
+        <div class="opt-row"><div class="opt-badge">D</div><input type="text" id="optD"></div>
+        <div class="opt-row"><div class="opt-badge">E</div><input type="text" id="optE"></div>
+        <label>Correct answer</label>
         <select id="correct"><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
-        <label for="explanation">Explanation</label>
+        <label>Explanation</label>
         <textarea id="explanation" style="min-height:70px"></textarea>
       </div>
     </details>
   </div>
 
+  <!-- STEP 2: SETTINGS -->
   <div class="panel">
-    <h2><span class="step">2</span> Arm &amp; theme</h2>
-    <label for="arm">Arm</label>
-    <select id="arm">
-      <option>Preclinical</option>
-      <option>Clinical</option>
-    </select>
-    <label style="margin-top:16px">Theme — <span id="themeHint" style="color:var(--gold)">recently-used themes are marked</span></label>
+    <h2><span class="step">2</span> Arm, day &amp; theme</h2>
+    <div class="row2">
+      <div>
+        <label>Arm</label>
+        <select id="arm">
+          <option>Preclinical</option>
+          <option>Clinical</option>
+        </select>
+      </div>
+      <div>
+        <label>Day number</label>
+        <input type="number" id="day" value="1" min="1">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px">
+      <label style="margin:0">Theme — auto-picked for you</label>
+      <button id="rerollBtn" type="button" style="flex:0 0 auto;padding:8px 14px;border:1px solid var(--line);border-radius:100px;background:var(--panel2);color:var(--gold);font:700 12px 'Inter',sans-serif;cursor:pointer;white-space:nowrap">🎲 New theme</button>
+    </div>
+    <div id="themeAutoNote" style="font-size:11.5px;color:var(--dim);margin-top:-2px;margin-bottom:8px"></div>
     <div class="swatches" id="swatches"></div>
   </div>
 
+  <!-- STEP 3: PREVIEW -->
   <div class="panel">
     <h2><span class="step">3</span> Preview &amp; download</h2>
     <div class="previews">
       <div class="pcard">
-        <h3>Question Card · post at 8AM <span class="ok" id="qDone"></span></h3>
+        <h3>Question Card · post at 8AM</h3>
         <div class="viewport" id="vpQ"><div class="stage" id="stageQ"></div></div>
-        <div class="overflowWarn" id="warnQ">⚠ Content may be too long — trim the question or options.</div>
+        <div class="status" id="overflowQ" style="margin-top:8px"></div>
       </div>
       <div class="pcard">
-        <h3>Answer Card · post at 4PM <span class="ok" id="aDone"></span></h3>
+        <h3>Answer Card · post at 4PM</h3>
         <div class="viewport" id="vpA"><div class="stage" id="stageA"></div></div>
-        <div class="overflowWarn" id="warnA">⚠ Content may be too long — trim the explanation.</div>
+        <div class="status" id="overflowA" style="margin-top:8px"></div>
       </div>
     </div>
   </div>
@@ -207,11 +206,11 @@ EXPLANATION: Because..."></textarea>
 
 <div class="dl">
   <div class="row">
-    <button class="ghost" id="dlQBtn" type="button"><span class="spinner"></span><span class="lbl">Question PNG</span></button>
-    <button class="ghost" id="dlABtn" type="button"><span class="spinner"></span><span class="lbl">Answer PNG</span></button>
+    <button class="ghost" id="dlQBtn">Question PNG</button>
+    <button class="ghost" id="dlABtn">Answer PNG</button>
   </div>
   <div class="row">
-    <button class="main" id="dlBothBtn" type="button"><span class="spinner"></span><span class="lbl">Download Both</span></button>
+    <button class="main" id="dlBothBtn">Download Both</button>
   </div>
 </div>
 
@@ -233,11 +232,8 @@ const THEMES = [
   {n:"Dusk",            bg:"linear-gradient(158deg,#0d0705 0%,#3A1A08 55%,#0a0504 100%)", ac:"#F4A261", g2:"#F4A261", txt:"#F7F0E9", glass:"rgba(255,255,255,0.06)", gborder:"rgba(244,162,97,0.40)", dark:1},
 ];
 
-const LS_STATE = "aefumsa_studio_state";
-const LS_HISTORY = "aefumsa_theme_history"; // {Preclinical:[idx,...], Clinical:[idx,...]}
-
 const S = {
-  arm:"Preclinical",
+  arm:"Preclinical", day:1,
   subject:"", topic:"", question:"",
   opts:["","","","",""], correct:"A", explanation:"",
   theme:0
@@ -246,53 +242,14 @@ const S = {
 const $ = id => document.getElementById(id);
 const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
-/* ============ PERSISTENCE ============ */
-let saveTimer=null;
-function saveState(){
-  try{ localStorage.setItem(LS_STATE, JSON.stringify(S)); }catch(e){}
-  const tag=$("savedTag"); tag.style.opacity="1";
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>{ tag.style.opacity=".5"; }, 900);
-}
-function loadState(){
-  try{
-    const raw=localStorage.getItem(LS_STATE);
-    if(!raw) return;
-    const d=JSON.parse(raw);
-    Object.assign(S,d);
-    $("arm").value=S.arm; $("subject").value=S.subject; $("topic").value=S.topic;
-    $("question").value=S.question;
-    ["A","B","C","D","E"].forEach((L,i)=>{ $("opt"+L).value=S.opts[i]||""; });
-    $("correct").value=S.correct; $("explanation").value=S.explanation;
-  }catch(e){}
-}
-function getHistory(){
-  try{ return JSON.parse(localStorage.getItem(LS_HISTORY)) || {Preclinical:[],Clinical:[]}; }
-  catch(e){ return {Preclinical:[],Clinical:[]}; }
-}
-function recordThemeUse(){
-  const h=getHistory();
-  if(!h[S.arm]) h[S.arm]=[];
-  h[S.arm].unshift(S.theme);
-  h[S.arm]=h[S.arm].slice(0,2); // remember last 2 per arm
-  try{ localStorage.setItem(LS_HISTORY, JSON.stringify(h)); }catch(e){}
-}
-
-/* ============ ROBUST PARSER ============ */
-function stripFences(text){
-  // remove ```lang ... ``` fences if present
-  return text.replace(/```[a-zA-Z]*\n?/g,"").replace(/```/g,"");
-}
+/* ================= PARSER ================= */
 function parsePaste(text){
-  text = stripFences(text);
   const labels = ["SUBJECT","TOPIC","QUESTION","A","B","C","D","E","ANSWER","EXPLANATION"];
   const out = {};
   let current = null;
   text.split(/\r?\n/).forEach(raw=>{
     const line = raw.trim();
     if(!line) return;
-    // A label line: starts with a known label followed by : . or )
-    // Only the FIRST such delimiter splits — colons later in the text stay intact.
     const m = line.match(/^([A-Za-z]+)\s*[:.\)]\s*(.*)$/);
     if(m && labels.includes(m[1].toUpperCase())){
       current = m[1].toUpperCase();
@@ -303,6 +260,7 @@ function parsePaste(text){
   });
   return out;
 }
+
 function applyParsed(p){
   S.subject = (p.SUBJECT||"").trim();
   S.topic = (p.TOPIC||"").trim();
@@ -310,49 +268,36 @@ function applyParsed(p){
   S.opts = [p.A,p.B,p.C,p.D,p.E].map(x=>(x||"").trim());
   S.correct = ((p.ANSWER||"A").trim().toUpperCase().match(/[A-E]/)||["A"])[0];
   S.explanation = (p.EXPLANATION||"").trim();
-  $("subject").value=S.subject; $("topic").value=S.topic; $("question").value=S.question;
-  ["A","B","C","D","E"].forEach((L,i)=>{ $("opt"+L).value=S.opts[i]; });
-  $("correct").value=S.correct; $("explanation").value=S.explanation;
+
+  $("subject").value = S.subject;
+  $("topic").value = S.topic;
+  $("question").value = S.question;
+  $("optA").value = S.opts[0]; $("optB").value = S.opts[1]; $("optC").value = S.opts[2];
+  $("optD").value = S.opts[3]; $("optE").value = S.opts[4];
+  $("correct").value = S.correct;
+  $("explanation").value = S.explanation;
 }
 
 $("parseBtn").onclick = ()=>{
   const raw = $("pasteBox").value;
   const st = $("statusMsg");
-  if(!raw.trim()){ st.className="status err"; st.textContent="Paste something first."; return; }
+  if(!raw.trim()){
+    st.className = "status err"; st.textContent = "Paste something first."; return;
+  }
   const p = parsePaste(raw);
-  const missing = [];
-  if(!p.QUESTION) missing.push("QUESTION");
-  if(!p.A||!p.B) missing.push("options");
-  if(!p.ANSWER) missing.push("ANSWER");
-  applyParsed(p); saveState(); render();
-  if(missing.length===0){
-    st.className="status ok"; st.textContent="Done — both cards updated below. Check them, then download.";
+  const gotQ = p.QUESTION && p.A && p.B;
+  applyParsed(p);
+  render();
+  if(gotQ){
+    st.className = "status ok";
+    st.textContent = "Done — both cards updated below. Check they look right, then download.";
   } else {
-    st.className="status warn"; st.textContent="Parsed, but couldn't find: "+missing.join(", ")+". Check the format or edit fields manually.";
+    st.className = "status err";
+    st.textContent = "Couldn't find all fields. Check the format matches the example, or fill fields manually below.";
   }
-};
-$("pasteBtn").onclick = async ()=>{
-  try{
-    const t = await navigator.clipboard.readText();
-    $("pasteBox").value = t; 
-    $("parseBtn").click();
-  }catch(e){
-    $("statusMsg").className="status warn";
-    $("statusMsg").textContent="Clipboard blocked — long-press the box and paste manually, then tap Split.";
-  }
-};
-$("clearBtn").onclick = ()=>{
-  if(!confirm("Clear the paste box and all fields?")) return;
-  $("pasteBox").value="";
-  Object.assign(S,{subject:"",topic:"",question:"",opts:["","","","",""],correct:"A",explanation:""});
-  ["subject","topic","question","explanation"].forEach(id=>$(id).value="");
-  ["A","B","C","D","E"].forEach(L=>$("opt"+L).value="");
-  $("correct").value="A";
-  $("statusMsg").className="status"; $("statusMsg").textContent="";
-  saveState(); render();
 };
 
-/* ============ CARD RENDER ============ */
+/* ================= CARD RENDER ================= */
 function cardHTML(mode){
   const t = THEMES[S.theme];
   const isAns = mode === "answer";
@@ -367,12 +312,20 @@ function cardHTML(mode){
   const pillBg = t.dark ? "rgba(255,255,255,.045)" : "rgba(255,255,255,.5)";
   const pillBorder = t.dark ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.14)";
   const correctText = t.dark ? "#0d0d0d" : "#ffffff";
-  const wmColor = t.dark ? "#ffffff" : "#000000";
+
+  // Answer card shows only the correct option + explanation. Explanation sizing
+  // eases down with length so the "Why" always fits fully inside the card.
+  const explLen = (S.explanation||"").trim().length;
+  const explSize = explLen>620?22:explLen>460?24:explLen>300?26:28;
+  const explPad  = explLen>460?"28px 36px":"34px 40px";
 
   const options = ["A","B","C","D","E"].map((L,i)=>{
     const txt = S.opts[i].trim();
     if(!txt) return "";
     const isC = isAns && S.correct===L;
+    // ANSWER card shows ONLY the correct option — wrong options are dropped
+    // so the correct answer + "Why" get the full space.
+    if(isAns && !isC) return "";
     if(isC){
       return `<div class="pill correct" style="background:${t.ac};border-color:${t.ac};color:${correctText}">
         <div class="lt" style="border-color:${correctText};color:${correctText}">${L}</div>
@@ -380,17 +333,29 @@ function cardHTML(mode){
         <div class="tag" style="background:${correctText};color:${t.ac}">Correct</div>
       </div>`;
     }
-    return `<div class="pill" style="background:${pillBg};border-color:${pillBorder};color:${t.txt};${isAns?'opacity:.45':''}">
+    return `<div class="pill" style="background:${pillBg};border-color:${pillBorder};color:${t.txt}">
       <div class="lt" style="border-color:${t.ac};color:${t.ac}">${L}</div>
       <div class="tx" style="font-size:${optTx}px">${esc(txt)}</div>
     </div>`;
   }).join("");
 
   const explBlock = isAns && S.explanation.trim() ? `
-    <div class="glass c-expl" style="background:${t.glass};border-color:${t.gborder}">
-      <span class="etag" style="color:${t.ac}">Why</span>
-      <div class="etx" style="color:${t.txt}">${esc(S.explanation)}</div>
+    <div class="glass c-expl" style="background:${t.glass};border-color:${t.gborder};margin-top:18px;padding:${explPad}">
+      <span class="etag" style="color:${t.ac};margin-bottom:12px">Why</span>
+      <div class="etx" style="color:${t.txt};font-size:${explSize}px;line-height:1.46">${esc(S.explanation)}</div>
     </div>` : "";
+
+  // Answer card carries one option + explanation. The repeated question is
+  // shown smaller here (it's a reminder, not the focus) to guarantee the
+  // correct answer + "Why" always fit fully inside the 1350px card.
+  const ansQSize = qLen>320?22:qLen>220?25:qLen>130?28:31;
+  const subjMargin = isAns ? 22 : 44;
+  const ruleMargin  = isAns ? 14 : 26;
+  const qMargin     = isAns ? 22 : 38;
+  const qPad        = isAns ? "28px 38px" : "46px 50px";
+  const qTagMargin  = isAns ? 12 : 18;
+  const optsMargin  = isAns ? 22 : 34;
+  const optsGap     = isAns ? 16 : 16;
 
   return `
   <div class="card" style="background:${t.bg};color:${t.txt}">
@@ -406,30 +371,31 @@ function cardHTML(mode){
         <div class="c-eyebrow" style="color:${t.txt}">AEFUMSA · Daily MCQ</div>
         <div class="c-arm" style="color:${t.ac};border-color:${t.ac}">${esc(S.arm)} Arm</div>
       </div>
+
     </div>
 
-    <div class="c-subject" style="font-size:${isAns?subjSize*0.72:subjSize}px">${esc(subj)}</div>
-    <div class="c-topic" style="color:${dim}">${esc(S.topic||"Topic")}</div>
-    <div class="c-rule" style="background:linear-gradient(90deg,${t.ac},transparent)"></div>
+    <div class="c-subject" style="font-size:${isAns?subjSize*0.72:subjSize}px;margin-top:${subjMargin}px">${esc(subj)}</div>
+    <div class="c-topic" style="color:${dim};margin-top:${isAns?10:16}px">${esc(S.topic||"Topic")}</div>
+    <div class="c-rule" style="background:linear-gradient(90deg,${t.ac},transparent);margin-top:${ruleMargin}px"></div>
 
-    <div class="glass c-q" style="background:${t.glass};border-color:${t.gborder};font-size:${isAns?Math.max(qSize-8,25):qSize}px">
-      <span class="qtag" style="color:${t.ac}">${isAns?"The Question":"Question"}</span>
+    <div class="glass c-q" style="background:${t.glass};border-color:${t.gborder};font-size:${isAns?ansQSize:qSize}px;margin-top:${qMargin}px;padding:${qPad}">
+      <span class="qtag" style="color:${t.ac};margin-bottom:${qTagMargin}px">${isAns?"The Question":"Question"}</span>
       ${esc(S.question||"Your question will appear here…")}
     </div>
 
-    <div class="c-opts"><div class="watermark" style="color:${wmColor}">AEFUMSA</div>${options}${explBlock}</div>
+    <div class="c-opts" style="margin-top:${optsMargin}px;gap:${optsGap}px"><div class="watermark">AEFUMSA</div>${options}${explBlock}</div>
 
     <div class="c-foot" style="border-color:${footLine}">
       <div>
-        <div class="wm" style="color:${t.txt}">AEF<em style="color:${t.ac}">U</em>MSA</div>
-        <div class="assoc" style="color:${t.txt}">Medical Students' Association</div>
+        <div class="wm">AEF<em style="color:${t.ac}">U</em>MSA</div>
+        <div class="assoc">Medical Students' Association</div>
       </div>
       <div class="uni" style="color:${t.txt}">AE-FUNAI</div>
     </div>
   </div>`;
 }
 
-/* ============ PREVIEW + OVERFLOW CHECK ============ */
+/* ================= PREVIEW ================= */
 function fitOne(vpId, stId){
   const vp = $(vpId), st = $(stId);
   const scale = vp.clientWidth / 1080;
@@ -437,51 +403,94 @@ function fitOne(vpId, stId){
   st.style.width = "1080px";
   vp.style.height = (1350*scale) + "px";
 }
-function checkOverflow(stId, warnId){
-  const card = $(stId).querySelector(".card");
-  if(!card){ return; }
-  // scrollHeight beyond 1350 means content clipped
-  const over = card.scrollHeight > 1352;
-  $(warnId).classList.toggle("show", over);
+function checkOverflow(mode, warnId){
+  const warn = $(warnId);
+  if(!warn) return;
+  // Measure the card's TRUE natural height by rendering an off-screen copy
+  // with the 1350px clamp released. scrollHeight is unreliable here because
+  // the options container uses flex:1 and there's an absolutely-positioned
+  // watermark — both distort scrollHeight. This clone method is accurate.
+  const probe = document.createElement("div");
+  probe.style.cssText = "position:fixed;left:-99999px;top:0;width:1080px";
+  probe.innerHTML = cardHTML(mode);
+  const card = probe.firstElementChild;
+  card.style.height = "auto";
+  card.style.overflow = "visible";
+  document.body.appendChild(probe);
+  const natural = card.getBoundingClientRect().height;
+  document.body.removeChild(probe);
+  if(natural > 1350){
+    warn.className = "status err";
+    warn.textContent = "⚠ Content is taller than the card — shorten the explanation before downloading.";
+  } else {
+    warn.className = "";
+    warn.textContent = "";
+  }
 }
 function render(){
   $("stageQ").innerHTML = cardHTML("question");
   $("stageA").innerHTML = cardHTML("answer");
   fitOne("vpQ","stageQ");
   fitOne("vpA","stageA");
-  checkOverflow("stageQ","warnQ");
-  checkOverflow("stageA","warnA");
-  renderSwatches();
+  checkOverflow("question","overflowQ");
+  checkOverflow("answer","overflowA");
 }
 window.addEventListener("resize", render);
 
-/* ============ FIELD BINDINGS ============ */
+/* ================= MANUAL FIELD BINDINGS ================= */
 [["arm","arm"],["subject","subject"],["topic","topic"],["question","question"],["correct","correct"],["explanation","explanation"]]
-.forEach(([id,key])=>{ $(id).addEventListener("input", e=>{ S[key]=e.target.value; saveState(); render(); }); });
+.forEach(([id,key])=>{ $(id).addEventListener("input", e=>{ S[key]=e.target.value; render(); }); });
+$("day").addEventListener("input", e=>{ S.day = parseInt(e.target.value)||1; render(); });
 ["A","B","C","D","E"].forEach((L,i)=>{
-  $("opt"+L).addEventListener("input", e=>{ S.opts[i]=e.target.value; saveState(); render(); });
+  $("opt"+L).addEventListener("input", e=>{ S.opts[i]=e.target.value; render(); });
 });
 
-/* ============ THEME SWATCHES (with recent-use marks) ============ */
+/* ================= THEME SWATCHES ================= */
 const sw = $("swatches");
-function renderSwatches(){
-  const recent = getHistory()[S.arm] || [];
-  sw.innerHTML = "";
-  THEMES.forEach((t,i)=>{
-    const b = document.createElement("button");
-    b.type="button";
-    b.className = "swatch" + (i===S.theme?" on":"");
-    b.setAttribute("aria-label", t.n + (recent.includes(i)?" (recently used)":""));
-    const recentTag = recent.includes(i) ? `<span class="recent">Recent</span>` : "";
-    const previewText = t.dark ? "#fff" : "#111";
-    b.innerHTML = `<div class="dot" style="background:${t.bg}">${recentTag}<b style="color:${t.ac}">Aa</b><i style="background:${t.ac}"></i></div><span>${t.n}</span>`;
-    b.onclick = ()=>{ S.theme=i; saveState(); render(); };
-    sw.appendChild(b);
-  });
-}
+THEMES.forEach((t,i)=>{
+  const b = document.createElement("button");
+  b.className = "swatch";
+  b.innerHTML = `<div class="dot" style="background:${t.bg}"><i style="background:${t.ac}"></i></div><span>${t.n}</span>`;
+  b.onclick = ()=>{ setTheme(i, false); };
+  sw.appendChild(b);
+});
 
-/* ============ EXPORT ============ */
-const stamp = ()=> new Date().toISOString().slice(0,10); // YYYY-MM-DD
+/* ================= AUTO THEME PICKER ================= */
+// Remembers the last few themes used (across days/sessions) so the
+// auto-pick doesn't repeat the same look two days in a row.
+const RECENT_KEY = "aefumsa_recentThemes";
+const RECENT_LIMIT = 4; // how many recent themes to avoid repeating
+
+function getRecentThemes(){
+  try{ return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
+  catch(e){ return []; }
+}
+function saveRecentTheme(i){
+  let recent = getRecentThemes().filter(x=>x!==i);
+  recent.unshift(i);
+  recent = recent.slice(0, RECENT_LIMIT);
+  try{ localStorage.setItem(RECENT_KEY, JSON.stringify(recent)); }catch(e){}
+}
+function setTheme(i, isAuto){
+  S.theme = i;
+  sw.querySelectorAll(".swatch").forEach(x=>x.classList.remove("on"));
+  if(sw.children[i]) sw.children[i].classList.add("on");
+  saveRecentTheme(i);
+  const note = $("themeAutoNote");
+  if(note) note.textContent = (isAuto ? "🎲 Auto-picked: " : "Selected: ") + THEMES[i].n + " — tap a swatch or reroll to change it.";
+  render();
+}
+function pickAutoTheme(){
+  const recent = getRecentThemes();
+  let pool = THEMES.map((_,i)=>i).filter(i=>!recent.includes(i));
+  if(pool.length===0) pool = THEMES.map((_,i)=>i); // safety fallback
+  const choice = pool[Math.floor(Math.random()*pool.length)];
+  setTheme(choice, true);
+}
+$("rerollBtn").onclick = ()=>{ pickAutoTheme(); };
+pickAutoTheme(); // auto-select a theme the moment the page opens
+
+/* ================= EXPORT ================= */
 async function exportCard(mode){
   await document.fonts.ready;
   const holder = document.createElement("div");
@@ -494,39 +503,31 @@ async function exportCard(mode){
   });
   document.body.removeChild(holder);
   const a = document.createElement("a");
-  a.download = `AEFUMSA_${stamp()}_${S.arm}_${mode==="answer"?"ANSWER":"QUESTION"}.png`;
+  a.download = `AEFUMSA_Day${String(S.day).padStart(2,"0")}_${S.arm}_${mode==="answer"?"ANSWER":"QUESTION"}.png`;
   a.href = canvas.toDataURL("image/png");
   a.click();
 }
-function busy(btn, on){
-  btn.disabled=on;
-  btn.querySelector(".spinner").style.display = on?"inline-block":"none";
-}
+
 $("dlQBtn").onclick = async ()=>{
-  const b=$("dlQBtn"); busy(b,true);
-  try{ await exportCard("question"); $("qDone").textContent="✓"; recordThemeUse(); render(); }
-  catch(e){ alert("Export failed: "+e.message); }
-  busy(b,false);
+  const b = $("dlQBtn"); b.disabled=true; b.textContent="Rendering…";
+  try{ await exportCard("question"); } catch(e){ alert("Export failed: "+e.message); }
+  b.disabled=false; b.textContent="Question PNG";
 };
 $("dlABtn").onclick = async ()=>{
-  const b=$("dlABtn"); busy(b,true);
-  try{ await exportCard("answer"); $("aDone").textContent="✓"; recordThemeUse(); render(); }
-  catch(e){ alert("Export failed: "+e.message); }
-  busy(b,false);
+  const b = $("dlABtn"); b.disabled=true; b.textContent="Rendering…";
+  try{ await exportCard("answer"); } catch(e){ alert("Export failed: "+e.message); }
+  b.disabled=false; b.textContent="Answer PNG";
 };
 $("dlBothBtn").onclick = async ()=>{
-  const b=$("dlBothBtn"); busy(b,true);
+  const b = $("dlBothBtn"); b.disabled=true; b.textContent="Rendering both…";
   try{
-    await exportCard("question"); $("qDone").textContent="✓";
+    await exportCard("question");
     await new Promise(r=>setTimeout(r,400));
-    await exportCard("answer"); $("aDone").textContent="✓";
-    recordThemeUse(); render();
-  }catch(e){ alert("Export failed: "+e.message); }
-  busy(b,false);
+    await exportCard("answer");
+  } catch(e){ alert("Export failed: "+e.message); }
+  b.disabled=false; b.textContent="Download Both";
 };
 
-/* ============ INIT ============ */
-loadState();
 render();
 </script>
 </body>
