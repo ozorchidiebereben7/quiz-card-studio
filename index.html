@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -90,9 +90,6 @@
   .c-top{display:flex;justify-content:space-between;align-items:flex-start}
   .c-eyebrow{font-size:21px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;opacity:.85}
   .c-arm{display:inline-block;margin-top:14px;font-size:17px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;padding:10px 22px;border-radius:100px;border:1.5px solid}
-  .c-day{text-align:right;font-family:'Bebas Neue',sans-serif;line-height:.85}
-  .c-day .n{font-size:96px;letter-spacing:.02em}
-  .c-day .l{font-size:22px;letter-spacing:.5em;opacity:.65;display:block;margin-bottom:6px;font-family:'Inter',sans-serif;font-weight:700}
   .c-subject{font-family:'Playfair Display',serif;font-weight:900;margin-top:44px;line-height:1.02;letter-spacing:-.01em}
   .c-topic{margin-top:16px;font-size:22px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;opacity:.72}
   .c-rule{height:3px;width:110px;margin-top:26px;border-radius:2px}
@@ -109,9 +106,9 @@
   .c-expl .etag{font-size:16px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;display:block;margin-bottom:16px}
   .c-expl .etx{font-size:26px;line-height:1.5;font-weight:400}
   .c-foot{margin-top:auto;padding-top:34px;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid}
-  .c-foot .wm{font-family:'Playfair Display',serif;font-weight:900;font-size:34px;letter-spacing:.04em}
+  .c-foot .wm{font-family:'Playfair Display',serif;font-weight:900;font-size:34px;letter-spacing:.04em;opacity:.4}
   .c-foot .wm em{font-style:italic}
-  .c-foot .assoc{font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;margin-top:6px}
+  .c-foot .assoc{font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.35;margin-top:6px}
   .c-foot .uni{font-size:17px;font-weight:800;letter-spacing:.4em;text-transform:uppercase;opacity:.75}
 </style>
 </head>
@@ -164,20 +161,12 @@ EXPLANATION: Because..."></textarea>
 
   <!-- STEP 2: SETTINGS -->
   <div class="panel">
-    <h2><span class="step">2</span> Arm, day &amp; theme</h2>
-    <div class="row2">
-      <div>
-        <label>Arm</label>
-        <select id="arm">
-          <option>Preclinical</option>
-          <option>Clinical</option>
-        </select>
-      </div>
-      <div>
-        <label>Day number</label>
-        <input type="number" id="day" value="1" min="1">
-      </div>
-    </div>
+    <h2><span class="step">2</span> Arm &amp; theme</h2>
+    <label>Arm</label>
+    <select id="arm">
+      <option>Preclinical</option>
+      <option>Clinical</option>
+    </select>
     <label style="margin-top:16px">Theme — same theme used for both cards</label>
     <div class="swatches" id="swatches"></div>
   </div>
@@ -227,7 +216,7 @@ const THEMES = [
 ];
 
 const S = {
-  arm:"Preclinical", day:1,
+  arm:"Preclinical",
   subject:"", topic:"", question:"",
   opts:["","","","",""], correct:"A", explanation:"",
   theme:0
@@ -344,10 +333,6 @@ function cardHTML(mode){
         <div class="c-eyebrow" style="color:${t.txt}">AEFUMSA · Daily MCQ</div>
         <div class="c-arm" style="color:${t.ac};border-color:${t.ac}">${esc(S.arm)} Arm</div>
       </div>
-      <div class="c-day" style="color:${t.ac}">
-        <span class="l" style="color:${dim}">Day</span>
-        <span class="n">${String(S.day).padStart(2,"0")}</span>
-      </div>
     </div>
 
     <div class="c-subject" style="font-size:${isAns?subjSize*0.72:subjSize}px">${esc(subj)}</div>
@@ -363,8 +348,8 @@ function cardHTML(mode){
 
     <div class="c-foot" style="border-color:${footLine}">
       <div>
-        <div class="wm">AEF<em style="color:${t.ac}">U</em>MSA</div>
-        <div class="assoc">Medical Students' Association</div>
+        <div class="wm" style="color:${t.txt}">AEF<em style="color:${t.ac}">U</em>MSA</div>
+        <div class="assoc" style="color:${t.txt}">Medical Students' Association</div>
       </div>
       <div class="uni" style="color:${t.txt}">AE-FUNAI</div>
     </div>
@@ -390,7 +375,6 @@ window.addEventListener("resize", render);
 /* ================= MANUAL FIELD BINDINGS ================= */
 [["arm","arm"],["subject","subject"],["topic","topic"],["question","question"],["correct","correct"],["explanation","explanation"]]
 .forEach(([id,key])=>{ $(id).addEventListener("input", e=>{ S[key]=e.target.value; render(); }); });
-$("day").addEventListener("input", e=>{ S.day = parseInt(e.target.value)||1; render(); });
 ["A","B","C","D","E"].forEach((L,i)=>{
   $("opt"+L).addEventListener("input", e=>{ S.opts[i]=e.target.value; render(); });
 });
@@ -421,7 +405,7 @@ async function exportCard(mode){
   });
   document.body.removeChild(holder);
   const a = document.createElement("a");
-  a.download = `AEFUMSA_Day${String(S.day).padStart(2,"0")}_${S.arm}_${mode==="answer"?"ANSWER":"QUESTION"}.png`;
+  a.download = `AEFUMSA_${S.arm}_${mode==="answer"?"ANSWER":"QUESTION"}.png`;
   a.href = canvas.toDataURL("image/png");
   a.click();
 }
@@ -450,3 +434,5 @@ render();
 </script>
 </body>
 </html>
+ 
+
