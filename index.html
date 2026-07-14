@@ -87,6 +87,10 @@
   .deco-ring2{position:absolute;z-index:1;width:200px;height:200px;border-radius:50%;border:1px solid;opacity:.14;bottom:170px;right:60px}
   .deco-line{position:absolute;z-index:1;width:2px;height:340px;opacity:.16;left:60px;bottom:120px;transform:rotate(18deg)}
   .deco-sq{position:absolute;z-index:1;width:26px;height:26px;transform:rotate(45deg);opacity:.5;left:80px;top:330px}
+  /* AEFUMSA watermark — a faint, card-wide background wash sitting BEHIND every
+     panel and pill (z-index:1, below the z-index:2 content). Centered on the
+     whole card so it never lands on a specific option. */
+  .watermark{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font-family:"Playfair Display",serif;font-size:150px;font-weight:900;letter-spacing:14px;opacity:.025;pointer-events:none;z-index:1;white-space:nowrap}
   .c-top{display:flex;justify-content:space-between;align-items:flex-start}
   .c-eyebrow{font-size:21px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;opacity:.85}
   .c-arm{display:inline-block;margin-top:14px;font-size:17px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;padding:10px 22px;border-radius:100px;border:1.5px solid}
@@ -99,7 +103,7 @@
   .glass{border-radius:30px;border:1.5px solid;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 30px 70px rgba(0,0,0,.35)}
   .c-q{margin-top:38px;padding:46px 50px;line-height:1.42;font-weight:500}
   .c-q .qtag{font-size:17px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;display:block;margin-bottom:18px}
-  .c-opts{margin-top:34px;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0;justify-content:flex-start;position:relative}.watermark{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);font-family:"Playfair Display",serif;font-size:110px;font-weight:900;letter-spacing:8px;opacity:.04;pointer-events:none;z-index:0;white-space:nowrap}
+  .c-opts{margin-top:34px;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0;justify-content:flex-start;position:relative}
   .pill{display:flex;align-items:center;gap:22px;border-radius:100px;border:1.5px solid;padding:16px 30px 16px 16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   .pill .lt{width:56px;height:56px;flex:0 0 56px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:32px;padding-top:3px}
   .pill .tx{font-size:27px;font-weight:500;line-height:1.25}
@@ -297,65 +301,76 @@ $("parseBtn").onclick = ()=>{
   }
 };
 
-/* ================= CARD RENDER ================= */
-function cardHTML(mode){
+/* ================= CARD RENDER =================
+   The card is a fixed 1080x1350 poster. `fit` is an auto-computed scale
+   (1 = full size, down to ~0.6) applied to every flexible dimension —
+   font sizes, pill sizes, gaps and paddings — so a long question with 5
+   long options always shrinks just enough to sit fully ABOVE the footer.
+   The footer, card padding and header stay put; only the content breathes. */
+function cardHTML(mode, fit){
+  fit = fit || 1;
+  const F = v => Math.round(v*fit);          // scale a number by fit
   const t = THEMES[S.theme];
   const isAns = mode === "answer";
   const qLen = (S.question||"").length;
-  const qSize = qLen>320?29:qLen>220?33:qLen>130?37:42;
+  const qSize = F(qLen>320?29:qLen>220?33:qLen>130?37:42);
   const subj = S.subject || "Subject";
-  const subjSize = subj.length>18?62:subj.length>11?76:92;
+  const subjBase = subj.length>18?62:subj.length>11?76:92;
+  const subjSize = F(isAns ? subjBase*0.72 : subjBase);
   const optCount = S.opts.filter(o=>o.trim()).length || 5;
-  const optTx = optCount>4 && !isAns ? 27 : 26;
+  const optTx = F(optCount>4 && !isAns ? 27 : 26);
   const dim = t.dark ? "rgba(255,255,255,.45)" : "rgba(0,0,0,.4)";
   const footLine = t.dark ? "rgba(255,255,255,.14)" : "rgba(0,0,0,.12)";
   const pillBg = t.dark ? "rgba(255,255,255,.045)" : "rgba(255,255,255,.5)";
   const pillBorder = t.dark ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.14)";
   const correctText = t.dark ? "#0d0d0d" : "#ffffff";
 
-  // Answer card shows only the correct option + explanation. Explanation sizing
-  // eases down with length so the "Why" always fits fully inside the card.
   const explLen = (S.explanation||"").trim().length;
-  const explSize = explLen>620?22:explLen>460?24:explLen>300?26:28;
-  const explPad  = explLen>460?"28px 36px":"34px 40px";
+  const explSize = F(explLen>620?22:explLen>460?24:explLen>300?26:28);
+
+  // pill internals scale with fit so five options still clear the footer
+  const pillPadV = F(16);
+  const ltSize   = F(56);
+  const ltFont   = F(32);
+  const ansQSize = F(qLen>320?22:qLen>220?25:qLen>130?28:31);
 
   const options = ["A","B","C","D","E"].map((L,i)=>{
     const txt = S.opts[i].trim();
     if(!txt) return "";
     const isC = isAns && S.correct===L;
-    // ANSWER card shows ONLY the correct option — wrong options are dropped
-    // so the correct answer + "Why" get the full space.
+    // ANSWER card shows ONLY the correct option — wrong options are dropped.
     if(isAns && !isC) return "";
+    const ltOpen = `<div class="lt" style="width:${ltSize}px;height:${ltSize}px;flex:0 0 ${ltSize}px;font-size:${ltFont}px;`;
     if(isC){
-      return `<div class="pill correct" style="background:${t.ac};border-color:${t.ac};color:${correctText}">
-        <div class="lt" style="border-color:${correctText};color:${correctText}">${L}</div>
+      return `<div class="pill correct" style="padding:${pillPadV}px 30px ${pillPadV}px ${F(16)}px;background:${t.ac};border-color:${t.ac};color:${correctText}">
+        ${ltOpen}border-color:${correctText};color:${correctText}">${L}</div>
         <div class="tx" style="font-weight:700;font-size:${optTx}px">${esc(txt)}</div>
         <div class="tag" style="background:${correctText};color:${t.ac}">Correct</div>
       </div>`;
     }
-    return `<div class="pill" style="background:${pillBg};border-color:${pillBorder};color:${t.txt}">
-      <div class="lt" style="border-color:${t.ac};color:${t.ac}">${L}</div>
+    return `<div class="pill" style="padding:${pillPadV}px 30px ${pillPadV}px ${F(16)}px;background:${pillBg};border-color:${pillBorder};color:${t.txt}">
+      ${ltOpen}border-color:${t.ac};color:${t.ac}">${L}</div>
       <div class="tx" style="font-size:${optTx}px">${esc(txt)}</div>
     </div>`;
   }).join("");
 
+  const explPadV = F(explLen>460?28:34);
+  const explPadH = explLen>460?36:40;
   const explBlock = isAns && S.explanation.trim() ? `
-    <div class="glass c-expl" style="background:${t.glass};border-color:${t.gborder};margin-top:18px;padding:${explPad}">
-      <span class="etag" style="color:${t.ac};margin-bottom:12px">Why</span>
+    <div class="glass c-expl" style="background:${t.glass};border-color:${t.gborder};margin-top:${F(18)}px;padding:${explPadV}px ${explPadH}px">
+      <span class="etag" style="color:${t.ac};margin-bottom:${F(12)}px">Why</span>
       <div class="etx" style="color:${t.txt};font-size:${explSize}px;line-height:1.46">${esc(S.explanation)}</div>
     </div>` : "";
 
-  // Answer card carries one option + explanation. The repeated question is
-  // shown smaller here (it's a reminder, not the focus) to guarantee the
-  // correct answer + "Why" always fit fully inside the 1350px card.
-  const ansQSize = qLen>320?22:qLen>220?25:qLen>130?28:31;
-  const subjMargin = isAns ? 22 : 44;
-  const ruleMargin  = isAns ? 14 : 26;
-  const qMargin     = isAns ? 22 : 38;
-  const qPad        = isAns ? "28px 38px" : "46px 50px";
-  const qTagMargin  = isAns ? 12 : 18;
-  const optsMargin  = isAns ? 22 : 34;
-  const optsGap     = isAns ? 16 : 16;
+  const subjMargin  = F(isAns ? 22 : 44);
+  const topicMargin = F(isAns ? 10 : 16);
+  const ruleMargin  = F(isAns ? 14 : 26);
+  const qMargin     = F(isAns ? 22 : 38);
+  const qPadV       = F(isAns ? 28 : 46);
+  const qPadH       = isAns ? 38 : 50;
+  const qTagMargin  = F(isAns ? 12 : 18);
+  const optsMargin  = F(isAns ? 22 : 34);
+  const optsGap     = F(16);
 
   return `
   <div class="card" style="background:${t.bg};color:${t.txt}">
@@ -365,6 +380,7 @@ function cardHTML(mode){
     <div class="deco-ring2" style="border-color:${t.g2}"></div>
     <div class="deco-line" style="background:linear-gradient(${t.ac},transparent)"></div>
     <div class="deco-sq" style="border:2px solid ${t.g2}"></div>
+    <div class="watermark" style="color:${t.txt}">AEFUMSA</div>
 
     <div class="c-top">
       <div>
@@ -374,16 +390,16 @@ function cardHTML(mode){
 
     </div>
 
-    <div class="c-subject" style="font-size:${isAns?subjSize*0.72:subjSize}px;margin-top:${subjMargin}px">${esc(subj)}</div>
-    <div class="c-topic" style="color:${dim};margin-top:${isAns?10:16}px">${esc(S.topic||"Topic")}</div>
+    <div class="c-subject" style="font-size:${subjSize}px;margin-top:${subjMargin}px">${esc(subj)}</div>
+    <div class="c-topic" style="color:${dim};margin-top:${topicMargin}px">${esc(S.topic||"Topic")}</div>
     <div class="c-rule" style="background:linear-gradient(90deg,${t.ac},transparent);margin-top:${ruleMargin}px"></div>
 
-    <div class="glass c-q" style="background:${t.glass};border-color:${t.gborder};font-size:${isAns?ansQSize:qSize}px;margin-top:${qMargin}px;padding:${qPad}">
+    <div class="glass c-q" style="background:${t.glass};border-color:${t.gborder};font-size:${isAns?ansQSize:qSize}px;margin-top:${qMargin}px;padding:${qPadV}px ${qPadH}px">
       <span class="qtag" style="color:${t.ac};margin-bottom:${qTagMargin}px">${isAns?"The Question":"Question"}</span>
       ${esc(S.question||"Your question will appear here…")}
     </div>
 
-    <div class="c-opts" style="margin-top:${optsMargin}px;gap:${optsGap}px"><div class="watermark">AEFUMSA</div>${options}${explBlock}</div>
+    <div class="c-opts" style="margin-top:${optsMargin}px;gap:${optsGap}px">${options}${explBlock}</div>
 
     <div class="c-foot" style="border-color:${footLine}">
       <div>
@@ -395,6 +411,29 @@ function cardHTML(mode){
   </div>`;
 }
 
+/* ================= AUTO-FIT =================
+   Measure a card's true natural height off-screen, then find the largest
+   fit (<=1) that keeps the whole card within the 1350px frame. */
+function measureHeight(mode, fit){
+  const probe = document.createElement("div");
+  probe.style.cssText = "position:fixed;left:-99999px;top:0;width:1080px";
+  probe.innerHTML = cardHTML(mode, fit);
+  const card = probe.firstElementChild;
+  card.style.height = "auto";
+  card.style.overflow = "visible";
+  document.body.appendChild(probe);
+  const h = card.getBoundingClientRect().height;
+  document.body.removeChild(probe);
+  return h;
+}
+function bestFit(mode){
+  if(measureHeight(mode, 1) <= 1350) return 1;
+  for(let f = 0.97; f >= 0.6; f -= 0.03){
+    if(measureHeight(mode, f) <= 1350) return +f.toFixed(2);
+  }
+  return 0.6;
+}
+
 /* ================= PREVIEW ================= */
 function fitOne(vpId, stId){
   const vp = $(vpId), st = $(stId);
@@ -403,39 +442,30 @@ function fitOne(vpId, stId){
   st.style.width = "1080px";
   vp.style.height = (1350*scale) + "px";
 }
-function checkOverflow(mode, warnId){
+function checkOverflow(mode, warnId, fit){
   const warn = $(warnId);
   if(!warn) return;
-  // Measure the card's TRUE natural height by rendering an off-screen copy
-  // with the 1350px clamp released. scrollHeight is unreliable here because
-  // the options container uses flex:1 and there's an absolutely-positioned
-  // watermark — both distort scrollHeight. This clone method is accurate.
-  const probe = document.createElement("div");
-  probe.style.cssText = "position:fixed;left:-99999px;top:0;width:1080px";
-  probe.innerHTML = cardHTML(mode);
-  const card = probe.firstElementChild;
-  card.style.height = "auto";
-  card.style.overflow = "visible";
-  document.body.appendChild(probe);
-  const natural = card.getBoundingClientRect().height;
-  document.body.removeChild(probe);
-  if(natural > 1350){
+  const natural = measureHeight(mode, fit);
+  if(natural > 1352){
+    // Only possible if even the smallest size can't contain it.
     warn.className = "status err";
-    warn.textContent = "⚠ Content is taller than the card — shorten the explanation before downloading.";
+    warn.textContent = "⚠ Even at minimum size this is too long — trim the explanation or question a little.";
   } else {
     warn.className = "";
     warn.textContent = "";
   }
 }
 function render(){
-  $("stageQ").innerHTML = cardHTML("question");
-  $("stageA").innerHTML = cardHTML("answer");
+  const fitQ = bestFit("question");
+  const fitA = bestFit("answer");
+  $("stageQ").innerHTML = cardHTML("question", fitQ);
+  $("stageA").innerHTML = cardHTML("answer", fitA);
   fitOne("vpQ","stageQ");
   fitOne("vpA","stageA");
-  checkOverflow("question","overflowQ");
-  checkOverflow("answer","overflowA");
+  checkOverflow("question","overflowQ", fitQ);
+  checkOverflow("answer","overflowA", fitA);
 }
-window.addEventListener("resize", render);
+window.addEventListener("resize", ()=>{ fitOne("vpQ","stageQ"); fitOne("vpA","stageA"); });
 
 /* ================= MANUAL FIELD BINDINGS ================= */
 [["arm","arm"],["subject","subject"],["topic","topic"],["question","question"],["correct","correct"],["explanation","explanation"]]
@@ -493,9 +523,10 @@ pickAutoTheme(); // auto-select a theme the moment the page opens
 /* ================= EXPORT ================= */
 async function exportCard(mode){
   await document.fonts.ready;
+  const fit = bestFit(mode);               // same auto-fit as the preview
   const holder = document.createElement("div");
   holder.style.cssText = "position:fixed;left:-12000px;top:0;width:1080px;height:1350px;z-index:-1";
-  holder.innerHTML = cardHTML(mode);
+  holder.innerHTML = cardHTML(mode, fit);
   document.body.appendChild(holder);
   await new Promise(r=>setTimeout(r,120));
   const canvas = await html2canvas(holder.firstElementChild, {
@@ -532,5 +563,6 @@ render();
 </script>
 </body>
 </html>
+
 
 
