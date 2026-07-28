@@ -112,11 +112,19 @@
   .c-expl{margin-top:32px;padding:40px 46px}
   .c-expl .etag{font-size:16px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;display:block;margin-bottom:16px}
   .c-expl .etx{font-size:26px;line-height:1.5;font-weight:400}
-  .c-foot{margin-top:auto;padding-top:34px;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid}
+  /* Footer is position:relative so the centre badge can be pinned to the true
+     horizontal centre of the card, independent of the left/right block widths. */
+  .c-foot{margin-top:auto;padding-top:34px;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid;position:relative}
   .c-foot .wm{font-family:'Playfair Display',serif;font-weight:900;font-size:34px;letter-spacing:.04em}
   .c-foot .wm em{font-style:italic}
   .c-foot .assoc{font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;margin-top:6px}
   .c-foot .uni{font-size:17px;font-weight:800;letter-spacing:.4em;text-transform:uppercase;opacity:.75}
+  /* BOARD OF ACADEMICS badge — always sits dead-centre in the footer.
+     Its fill is the live theme accent and its text colour is computed from
+     that accent's luminance, so it stays readable on every theme. */
+  .c-board{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);
+    font-family:'Inter',sans-serif;font-weight:800;text-transform:uppercase;
+    white-space:nowrap;border-radius:100px;text-align:center;z-index:3}
 </style>
 </head>
 <body>
@@ -246,6 +254,26 @@ const S = {
 const $ = id => document.getElementById(id);
 const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
+/* ================= CONTRAST HELPERS =================
+   Any colour that sits on top of a theme accent (the BOARD badge text, the
+   "Correct" pill text) is chosen from the accent's own relative luminance,
+   using the WCAG formula. Bright accents get near-black text, dark accents
+   get white text — so nothing ever disappears, whatever theme is picked. */
+function hexToRgb(hex){
+  let h = String(hex).replace("#","").trim();
+  if(h.length===3) h = h.split("").map(c=>c+c).join("");
+  return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+}
+function relLuminance(hex){
+  const [r,g,b] = hexToRgb(hex).map(v=>{
+    v = v/255;
+    return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+  });
+  return 0.2126*r + 0.7152*g + 0.0722*b;
+}
+// Best readable ink for text placed ON the given background colour.
+function inkOn(hex){ return relLuminance(hex) > 0.42 ? "#0d0d0d" : "#ffffff"; }
+
 /* ================= PARSER ================= */
 function parsePaste(text){
   const labels = ["SUBJECT","TOPIC","QUESTION","A","B","C","D","E","ANSWER","EXPLANATION"];
@@ -323,7 +351,8 @@ function cardHTML(mode, fit){
   const footLine = t.dark ? "rgba(255,255,255,.14)" : "rgba(0,0,0,.12)";
   const pillBg = t.dark ? "rgba(255,255,255,.045)" : "rgba(255,255,255,.5)";
   const pillBorder = t.dark ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.14)";
-  const correctText = t.dark ? "#0d0d0d" : "#ffffff";
+  // Ink for anything sitting on the accent fill — computed, not hard-coded.
+  const correctText = inkOn(t.ac);
 
   const explLen = (S.explanation||"").trim().length;
   const explSize = F(explLen>620?22:explLen>460?24:explLen>300?26:28);
@@ -372,6 +401,21 @@ function cardHTML(mode, fit){
   const optsMargin  = F(isAns ? 22 : 34);
   const optsGap     = F(16);
 
+  /* ---- BOARD OF ACADEMICS badge (footer centre) ----
+     Fill  = theme accent (so it changes with every theme)
+     Text  = inkOn(accent) → black on bright accents, white on dark accents
+     Ring  = a soft halo in the opposite polarity so the pill edge separates
+             from the card background on both dark and light themes. */
+  const boardFill = t.ac;
+  const boardInk  = inkOn(t.ac);
+  const boardRing = t.dark ? "rgba(0,0,0,.45)" : "rgba(255,255,255,.75)";
+  const boardHTML = `<div class="c-board" style="
+      background:${boardFill};color:${boardInk};
+      font-size:${F(16)}px;letter-spacing:${(0.16*fit).toFixed(3)}em;
+      padding:${F(11)}px ${F(26)}px;
+      box-shadow:0 0 0 ${F(3)}px ${boardRing}, 0 8px 22px rgba(0,0,0,.28);
+    ">Board of Academics AEFUMSA</div>`;
+
   return `
   <div class="card" style="background:${t.bg};color:${t.txt}">
     <div class="bg-glow" style="background:${t.ac}"></div>
@@ -406,6 +450,7 @@ function cardHTML(mode, fit){
         <div class="wm">AEF<em style="color:${t.ac}">U</em>MSA</div>
         <div class="assoc">Medical Students' Association</div>
       </div>
+      ${boardHTML}
       <div class="uni" style="color:${t.txt}">AE-FUNAI</div>
     </div>
   </div>`;
@@ -563,6 +608,3 @@ render();
 </script>
 </body>
 </html>
-
-
-
