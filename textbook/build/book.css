@@ -1,0 +1,294 @@
+/* ============================================================
+   The n8n Automation Textbook — Print Stylesheet
+   Designed for Chromium print-to-PDF (A4)
+   ============================================================ */
+
+:root {
+  --ink:        #1a2332;
+  --ink-soft:   #3d4a5c;
+  --muted:      #6b7688;
+  --line:       #d8dee9;
+  --line-soft:  #e9edf3;
+  --brand:      #ea4b71;   /* n8n pink/red */
+  --brand-dark: #b8284d;
+  --accent:     #2b6cb0;   /* deep blue */
+  --accent-2:   #1f9d55;   /* green */
+  --amber:      #c05621;
+  --paper:      #ffffff;
+  --paper-tint: #f7f9fc;
+  --code-bg:    #f4f6fa;
+  --code-ink:   #24324a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Georgia", "Iowan Old Style", "Palatino Linotype", serif;
+  font-size: 11.2pt;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.page {
+  max-width: 100%;
+  padding: 0;
+}
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4, h5 {
+  font-family: "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+  color: var(--ink);
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 25pt;
+  margin: 0 0 0.35em;
+  color: var(--brand-dark);
+  letter-spacing: -0.01em;
+  page-break-before: always;
+  padding-top: 0.2em;
+}
+h1:first-of-type { page-break-before: avoid; }
+
+h1 .kicker {
+  display: block;
+  font-size: 10.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brand);
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+h2 {
+  font-size: 17pt;
+  margin: 1.5em 0 0.5em;
+  padding-bottom: 0.22em;
+  border-bottom: 2px solid var(--line);
+  color: var(--accent);
+}
+
+h3 {
+  font-size: 13.5pt;
+  margin: 1.3em 0 0.4em;
+  color: var(--ink);
+}
+
+h4 {
+  font-size: 11.8pt;
+  margin: 1.1em 0 0.35em;
+  color: var(--ink-soft);
+  text-transform: none;
+}
+
+h2, h3, h4 { page-break-after: avoid; }
+
+p { margin: 0.55em 0; orphans: 3; widows: 3; }
+
+a { color: var(--accent); text-decoration: none; }
+
+strong { color: var(--ink); font-weight: 700; }
+em { color: var(--ink-soft); }
+
+ul, ol { margin: 0.5em 0 0.7em; padding-left: 1.5em; }
+li { margin: 0.25em 0; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 1.6em 0;
+}
+
+/* ---------- Code ---------- */
+code {
+  font-family: "SF Mono", "JetBrains Mono", "Consolas", monospace;
+  font-size: 9.6pt;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  padding: 0.12em 0.38em;
+  border-radius: 4px;
+  border: 1px solid var(--line-soft);
+}
+
+pre {
+  background: #1b2432;
+  color: #e7edf5;
+  padding: 0.95em 1.15em;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 9.2pt;
+  line-height: 1.5;
+  page-break-inside: avoid;
+  border: 1px solid #0f1620;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+pre code {
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ---------- Tables ---------- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0 1.2em;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 9.6pt;
+  page-break-inside: avoid;
+}
+thead th {
+  background: var(--accent);
+  color: #fff;
+  text-align: left;
+  padding: 0.55em 0.7em;
+  font-weight: 600;
+  border: 1px solid var(--accent);
+}
+tbody td {
+  padding: 0.5em 0.7em;
+  border: 1px solid var(--line);
+  vertical-align: top;
+}
+tbody tr:nth-child(even) { background: var(--paper-tint); }
+
+/* ---------- Blockquotes → default callout ---------- */
+blockquote {
+  margin: 1em 0;
+  padding: 0.7em 1.1em;
+  border-left: 4px solid var(--muted);
+  background: var(--paper-tint);
+  color: var(--ink-soft);
+  border-radius: 0 6px 6px 0;
+  page-break-inside: avoid;
+}
+blockquote p:first-child { margin-top: 0; }
+blockquote p:last-child { margin-bottom: 0; }
+
+/* ---------- Callout boxes (via emoji-led blockquotes handled in build) ---------- */
+.callout {
+  margin: 1.1em 0;
+  padding: 0.85em 1.1em 0.85em 1.15em;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-left-width: 5px;
+  page-break-inside: avoid;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+}
+.callout .callout-title {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.3em;
+  letter-spacing: 0.02em;
+}
+.callout p { margin: 0.3em 0; }
+.callout.note    { background: #eef5fd; border-color: #b9d6f2; border-left-color: var(--accent); }
+.callout.note .callout-title { color: var(--accent); }
+.callout.warning { background: #fef3ec; border-color: #f6cdad; border-left-color: var(--amber); }
+.callout.warning .callout-title { color: var(--amber); }
+.callout.tip     { background: #edf9f1; border-color: #b5e3c6; border-left-color: var(--accent-2); }
+.callout.tip .callout-title { color: var(--accent-2); }
+.callout.best    { background: #f3f0fb; border-color: #d3c6ef; border-left-color: #6b46c1; }
+.callout.best .callout-title { color: #6b46c1; }
+.callout.debug   { background: #fdf1f4; border-color: #f2c2d0; border-left-color: var(--brand); }
+.callout.debug .callout-title { color: var(--brand-dark); }
+
+/* ---------- Mermaid ---------- */
+.mermaid {
+  text-align: center;
+  margin: 1.2em 0;
+  page-break-inside: avoid;
+  background: var(--paper-tint);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  padding: 0.8em;
+}
+.mermaid svg { max-width: 100%; height: auto; }
+
+/* ---------- Figure caption ---------- */
+.figcaption, .caption {
+  text-align: center;
+  font-size: 9pt;
+  color: var(--muted);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  margin: -0.4em 0 1.2em;
+  font-style: italic;
+}
+
+/* ---------- Section labels used in lessons ---------- */
+h2 .sec-emoji { margin-right: 0.35em; }
+
+/* ---------- Cover page ---------- */
+.cover {
+  height: 96vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  page-break-after: always;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(234,75,113,0.10), transparent 45%),
+    radial-gradient(circle at 75% 80%, rgba(43,108,176,0.10), transparent 45%);
+  border-radius: 12px;
+}
+.cover .badge {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--brand);
+  font-weight: 700;
+  font-size: 11pt;
+}
+.cover h1 {
+  page-break-before: avoid;
+  font-size: 40pt;
+  color: var(--ink);
+  margin: 0.3em 0 0.1em;
+  border: none;
+}
+.cover .subtitle {
+  font-size: 15pt;
+  color: var(--ink-soft);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  margin: 0.4em auto;
+  max-width: 80%;
+}
+.cover .part-label {
+  margin-top: 1.4em;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 13pt;
+  color: var(--brand-dark);
+  font-weight: 600;
+}
+.cover .author {
+  margin-top: 2em;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: var(--muted);
+  font-size: 10.5pt;
+}
+
+/* ---------- Table of Contents ---------- */
+.toc { page-break-after: always; }
+.toc h2 { border: none; color: var(--brand-dark); }
+.toc ol { list-style: none; padding-left: 0; counter-reset: toc; }
+.toc li {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  padding: 0.28em 0;
+  border-bottom: 1px dotted var(--line);
+  display: flex;
+  justify-content: space-between;
+}
+.toc a { color: var(--ink-soft); }
+.toc .toc-h3 { padding-left: 1.4em; font-size: 9.8pt; color: var(--muted); }
