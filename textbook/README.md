@@ -21,7 +21,7 @@ bash build-all.sh
 - [x] Front Matter (cover, preface, how-to-read, master TOC)
 - [x] Part 1 — Computer Fundamentals
 - [x] Part 2 — Automation Fundamentals
-- [ ] Part 3 — n8n Fundamentals
+- [x] Part 3 — n8n Fundamentals
 - [ ] Part 4 — JSON
 - [ ] Part 5 — APIs
 - [ ] Part 6 — Authentication
