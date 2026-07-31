@@ -28,7 +28,7 @@ bash build-all.sh
 - [x] Part 7 — Webhooks & Real-Time
 - [x] Part 8 — The HTTP Request Node
 - [x] Part 9 — Every Important n8n Node
-- [ ] Part 10 — JavaScript for n8n
+- [x] Part 10 — JavaScript for n8n
 - [ ] Part 11 — AI Automation
 - [ ] Part 12 — Enterprise Automation
 - [ ] Part 13 — Ten Real Projects
