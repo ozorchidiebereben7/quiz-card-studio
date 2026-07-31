@@ -23,7 +23,7 @@ bash build-all.sh
 - [x] Part 2 — Automation Fundamentals
 - [x] Part 3 — n8n Fundamentals
 - [x] Part 4 — JSON
-- [ ] Part 5 — APIs
+- [x] Part 5 — APIs
 - [ ] Part 6 — Authentication
 - [ ] Part 7 — Webhooks & Real-Time
 - [ ] Part 8 — The HTTP Request Node
