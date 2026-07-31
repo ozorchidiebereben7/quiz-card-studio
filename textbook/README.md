@@ -20,7 +20,7 @@ bash build-all.sh
 ## Progress
 - [x] Front Matter (cover, preface, how-to-read, master TOC)
 - [x] Part 1 — Computer Fundamentals
-- [ ] Part 2 — Automation Fundamentals
+- [x] Part 2 — Automation Fundamentals
 - [ ] Part 3 — n8n Fundamentals
 - [ ] Part 4 — JSON
 - [ ] Part 5 — APIs
