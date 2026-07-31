@@ -30,5 +30,5 @@ bash build-all.sh
 - [x] Part 9 — Every Important n8n Node
 - [x] Part 10 — JavaScript for n8n
 - [x] Part 11 — AI Automation
-- [ ] Part 12 — Enterprise Automation
+- [x] Part 12 — Enterprise Automation
 - [ ] Part 13 — Ten Real Projects
