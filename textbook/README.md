@@ -25,7 +25,7 @@ bash build-all.sh
 - [x] Part 4 — JSON
 - [x] Part 5 — APIs
 - [x] Part 6 — Authentication
-- [ ] Part 7 — Webhooks & Real-Time
+- [x] Part 7 — Webhooks & Real-Time
 - [ ] Part 8 — The HTTP Request Node
 - [ ] Part 9 — Every Important n8n Node
 - [ ] Part 10 — JavaScript for n8n
