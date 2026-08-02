@@ -17,6 +17,16 @@ node build.mjs ../src/<chapter>.md ../pdf/<chapter>.pdf "Title" "Part label"
 bash build-all.sh
 ```
 
+
+## The Complete Book
+
+`pdf/00-THE-COMPLETE-BOOK.pdf` — all 13 Parts + front matter in one volume (168 rendered diagrams).
+Build it with:
+```bash
+cat src/00-front-matter.md src/0*-*.md src/1*-*.md > /tmp/fullbook.md
+node build/build.mjs /tmp/fullbook.md pdf/00-THE-COMPLETE-BOOK.pdf "The n8n Automation Handbook — Complete" "Complete Edition"
+```
+
 ## Progress
 - [x] Front Matter (cover, preface, how-to-read, master TOC)
 - [x] Part 1 — Computer Fundamentals
